@@ -1,0 +1,27 @@
+<html lang="en">
+  <head>
+    <title>PIKA</title>
+  </head>
+  <script src="../dist/pika.js"></script>
+  <script>
+    const instance = Pika.create()
+    console.log(instance)
+    instance.post('http://47.97.5.102:36666/mock/201/request-test/post-take-params',
+      { key: 2 },
+      {
+        responseType: 'text'
+      })
+      .then(console.log)
+
+    instance.get('http://47.97.5.102:36666/mock/201/request-test/get-take-params',
+      {
+        // key: 123
+      },
+      {
+        responseType: 'text'
+      })
+      .then(console.log)
+      .catch(console.error)
+
+  </script>
+</html>
