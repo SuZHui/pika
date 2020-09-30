@@ -187,7 +187,7 @@ export class HttpHeaders {
     }
   }
 
-  forEach (fn: (name: string, value: string[]) => void) {
+  forEach (fn: (name: string, value: string[]) => void): void {
     this.init()
     Array.from(this.normalizedNames.keys())
       .forEach(key => fn(this.normalizedNames.get(key)!, this.headers.get(key)!))

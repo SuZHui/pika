@@ -2,26 +2,37 @@
   <head>
     <title>PIKA</title>
   </head>
+  <script src="https://cdn.jsdelivr.net/npm/rxjs@6.6.3/index.min.js"></script>
   <script src="../dist/pika.js"></script>
   <script>
-    const instance = Pika.create()
-    console.log(instance)
-    instance.post('http://47.97.5.102:36666/mock/201/request-test/post-take-params',
-      { key: 2 },
-      {
-        responseType: 'text'
+    const pika = new Pika()
+    const testInterceptor = {
+      intercept(req, next) {
+        // noop intercept
+        // required to call the next handle
+        console.log('one interceptor')
+        return next.handle(req)
+      }
+    }
+    const secondInterceptor = {
+      intercept(req, next) {
+        console.log('two interceptor')
+        return next.handle(req)
+      }
+    }
+    const client = pika
+      .useInterceptors([
+        testInterceptor,
+        secondInterceptor
+      ])
+      .create()
+    client
+      .get(
+        'https://getman.cn/mock/test2',
+        { responseType: 'json' }
+      )
+      .subscribe(data => {
+        console.log(data)
       })
-      .then(console.log)
-
-    instance.get('http://47.97.5.102:36666/mock/201/request-test/get-take-params',
-      {
-        // key: 123
-      },
-      {
-        responseType: 'text'
-      })
-      .then(console.log)
-      .catch(console.error)
-
   </script>
 </html>

@@ -1,9 +1,2 @@
-import { PikaConfig, Pika } from './core/Pika'
-
-const create = (config?: PikaConfig) => {
-  return new Pika(config)
-}
-
-export {
-  create
-}
+import { Pika } from './core/Pika'
+export default Pika

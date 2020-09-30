@@ -1,7 +1,9 @@
 import * as path from 'path'
 import typescript from 'rollup-plugin-typescript2'
 import resolve from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
 import dts from 'rollup-plugin-dts'
+import { terser } from 'rollup-plugin-terser'
 
 const builds = {
   'cjs-dev': {
@@ -9,32 +11,38 @@ const builds = {
     format: 'cjs',
     mode: 'development',
   },
+  'cjs-prod': {
+    outFile: 'pika.common.prod.js',
+    format: 'cjs',
+    mode: 'production',
+  },
   'umd-dev': {
     outFile: 'pika.js',
     format: 'umd',
     mode: 'development',
   },
+  'umd-prod': {
+    outFile: 'pika.prod.js',
+    format: 'umd',
+    mode: 'production',
+  },
   esm: {
     outFile: 'pika.esm.js',
     format: 'es',
     mode: 'development',
-  },
-  // iife: {
-  //   outFile: 'pika.iife.js',
-  //   format: 'iife',
-  //   mode: 'development',
-  // }
+  }
 }
 
 const getAllBuilds = () => Object.keys(builds).map(key => getConfig(builds[key]))
 
 const getConfig = ({ outFile, format, mode }) => {
+  const isProd = mode === 'production'
   return {
     input: './src/main.ts',
     output: {
       file: path.join('dist', outFile),
       format,
-      exports: 'named',
+      exports: 'auto',
       name: ['umd'].includes(format) ? 'Pika' : undefined,
       sourcemap: true
     },
@@ -49,7 +57,9 @@ const getConfig = ({ outFile, format, mode }) => {
         clean: true
       }),
       resolve({ mainFields: ["jsnext", "preferBuiltins", "browser"] }),
-    ]
+      commonjs(),
+      isProd && terser()
+    ].filter(Boolean)
   }
 }
 
