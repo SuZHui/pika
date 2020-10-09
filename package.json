@@ -1,6 +1,6 @@
 {
   "name": "xylitol",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "dist/xylitol.js",
   "module": "dist/xylitol.esm.js",
