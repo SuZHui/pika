@@ -46,8 +46,8 @@ const getConfig = ({ outFile, format, mode }) => {
       exports: 'auto',
       name: ['umd'].includes(format) ? 'Xylitol' : undefined,
       globals: {
-        'rxjs': 'Rx',
-        'rxjs/operators': 'Rx'
+        'rxjs': 'rxjs',
+        'rxjs/operators': 'rxjs.operators'
       },
       sourcemap: !isProd
     },
