@@ -1,11 +1,11 @@
 <html lang="en">
   <head>
-    <title>PIKA</title>
+    <title>Xylitol</title>
   </head>
   <script src="https://cdn.jsdelivr.net/npm/rxjs@6.6.3/index.min.js"></script>
-  <script src="../dist/pika.js"></script>
+  <script src="../dist/xylitol.js"></script>
   <script>
-    const pika = new Pika()
+    const xylitol = new Xylitol()
     const testInterceptor = {
       intercept(req, next) {
         // noop intercept
@@ -20,7 +20,7 @@
         return next.handle(req)
       }
     }
-    const client = pika
+    const client = xylitol
       .useInterceptors([
         testInterceptor,
         secondInterceptor

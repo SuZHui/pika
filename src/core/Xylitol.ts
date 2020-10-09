@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs'
+import { Observable } from 'rxjs/internal/Observable'
 import { BrowserXhr, HttpXhrBackend } from './xhr';
 import { HttpClient } from './client';
 import { HttpBackend, HttpHandler } from './backend'
@@ -33,10 +33,10 @@ class HttpInterceptingHandler implements HttpHandler {
 //   )
 // }
 
-export class Pika {
+export class Xylitol {
   private interceptors: HttpInterceptor[] = []
 
-  useInterceptors (interceptors: HttpInterceptor[] = []): Pika {
+  useInterceptors (interceptors: HttpInterceptor[] = []): Xylitol {
     this.interceptors = this.interceptors.concat(interceptors)
     return this
   }

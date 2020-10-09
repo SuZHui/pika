@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { Observable, of } from 'rxjs'
+import { Observable } from 'rxjs/internal/Observable'
+import { of } from 'rxjs'
 import { concatMap, filter, map } from 'rxjs/operators'
 
 import { HttpParamsOptions } from './params'

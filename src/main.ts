@@ -1,2 +1,2 @@
-import { Pika } from './core/Pika'
-export default Pika
+import { Xylitol } from './core/Xylitol'
+export default Xylitol

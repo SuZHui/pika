@@ -1,4 +1,4 @@
-import { Observable, Observer } from 'rxjs'
+import { Observer, Observable } from 'rxjs'
 import { HttpBackend } from './backend'
 import { HttpHeaders } from './headers'
 import { HttpRequest } from './request'

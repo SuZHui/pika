@@ -1,6 +1,6 @@
 import { HttpEvent } from './response';
 import { HttpRequest } from "./request";
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/internal/Observable';
 /**
  * 将`HttpRequest`转化为 `HttpEvent`的事件流，最终会转为`HttpResponse`
  * 该对象将触发拦截器链的每一项 直到到达 `Backend`

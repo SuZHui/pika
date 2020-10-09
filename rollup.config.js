@@ -4,32 +4,33 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import dts from 'rollup-plugin-dts'
 import { terser } from 'rollup-plugin-terser'
+// import babel from '@rollup/plugin-babel'
 
 const builds = {
   'cjs-dev': {
-    outFile: 'pika.common.js',
+    outFile: 'xylitol.common.js',
     format: 'cjs',
     mode: 'development',
   },
   'cjs-prod': {
-    outFile: 'pika.common.prod.js',
+    outFile: 'xylitol.common.prod.js',
     format: 'cjs',
     mode: 'production',
   },
   'umd-dev': {
-    outFile: 'pika.js',
+    outFile: 'xylitol.js',
     format: 'umd',
     mode: 'development',
   },
   'umd-prod': {
-    outFile: 'pika.prod.js',
+    outFile: 'xylitol.prod.js',
     format: 'umd',
     mode: 'production',
   },
   esm: {
-    outFile: 'pika.esm.js',
+    outFile: 'xylitol.esm.js',
     format: 'es',
-    mode: 'development',
+    mode: 'production',
   }
 }
 
@@ -43,9 +44,14 @@ const getConfig = ({ outFile, format, mode }) => {
       file: path.join('dist', outFile),
       format,
       exports: 'auto',
-      name: ['umd'].includes(format) ? 'Pika' : undefined,
-      sourcemap: true
+      name: ['umd'].includes(format) ? 'Xylitol' : undefined,
+      globals: {
+        'rxjs': 'Rx',
+        'rxjs/operators': 'Rx'
+      },
+      sourcemap: !isProd
     },
+    external: ['rxjs', 'rxjs/operators'],
     plugins: [
       typescript({
         tsconfigOverride: {
@@ -56,8 +62,20 @@ const getConfig = ({ outFile, format, mode }) => {
         useTsconfigDeclarationDir: true,
         clean: true
       }),
-      resolve({ mainFields: ["jsnext", "preferBuiltins", "browser"] }),
-      commonjs(),
+      resolve({
+        mainFields: ["jsnext", "preferBuiltins"],
+        extensions: ['.ts', '.js'],
+        resolveOnly: ['rxjs', 'rxjs/operators', 'rxjs/Observable'],
+        modulesOnly: true
+      }),
+      commonjs({
+        include: 'node_modules/**'
+      }),
+      // babel({
+      //   include: ['src/**'],
+      //   babelHelpers: 'bundled',
+      //   extensions: ['.ts']
+      // }),
       isProd && terser()
     ].filter(Boolean)
   }
