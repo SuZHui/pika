@@ -34,7 +34,7 @@ function addBody<T> (
 }
 
 export class HttpClient {
-  constructor (private readonly handler: HttpHandler) {}
+  constructor (protected readonly handler: HttpHandler) {}
 
   // 发送``HttpRequest`并返回一个`HttpEvents`流
   request<R>(req: HttpRequest<any>): Observable<HttpEvent<R>>

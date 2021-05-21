@@ -2,10 +2,10 @@
   <head>
     <title>Xylitol</title>
   </head>
-  <script src="https://unpkg.com/rxjs@6.6.3/bundles/rxjs.umd.js"></script>
+  <script src="https://unpkg.com/rxjs@^7/dist/bundles/rxjs.umd.min.js"></script>
   <script src="../dist/xylitol.js"></script>
   <script>
-    const xylitol = new Xylitol()
+    const client = Xylitol.create()
     const testInterceptor = {
       intercept(req, next) {
         // noop intercept
@@ -20,12 +20,8 @@
         return next.handle(req)
       }
     }
-    const client = xylitol
-      .useInterceptors([
-        testInterceptor,
-        secondInterceptor
-      ])
-      .create()
+    client.addInterceptor(testInterceptor)
+    client.addInterceptor(secondInterceptor)
     client
       .get(
         'https://getman.cn/mock/test2',
@@ -33,6 +29,8 @@
       )
       .subscribe(data => {
         console.log(data)
+        client.removeInterceptor(1)
+        console.log(client)
       })
   </script>
 </html>

@@ -18,6 +18,15 @@ class HttpInterceptingHandler implements HttpHandler {
     }
     return this.chain.handle(req)
   }
+
+  addInterceptor (interceptor: HttpInterceptor): number {
+    this.interceptors.push(interceptor)
+    return this.interceptors.length - 1
+  }
+
+  removeInterceptor (id: number) {
+    this.interceptors.splice(id, 1)
+  }
 }
 
 // function interceptingHandler (
@@ -33,20 +42,70 @@ class HttpInterceptingHandler implements HttpHandler {
 //   )
 // }
 
-export class Xylitol {
-  private interceptors: HttpInterceptor[] = []
-
-  useInterceptors (interceptors: HttpInterceptor[] = []): Xylitol {
-    this.interceptors = this.interceptors.concat(interceptors)
-    return this
+export class Xylitol extends HttpClient {
+  constructor (handler: HttpInterceptingHandler) {
+    super(handler)
   }
 
-  create (): HttpClient {
+  addInterceptor (interceptor: HttpInterceptor): number {
+    const handler = this.handler as HttpInterceptingHandler
+    return handler.addInterceptor(interceptor)
+  }
+
+  removeInterceptor (id: number): void {
+    const handler = this.handler as HttpInterceptingHandler
+    handler.removeInterceptor(id)
+  }
+
+  static create (): Xylitol {
     const xhrFactory = new BrowserXhr()
     const backend = new HttpXhrBackend(xhrFactory)
     // 融合拦截器
-    const httpInterceptingHandler = new HttpInterceptingHandler(backend, this.interceptors)
+    const httpInterceptingHandler = new HttpInterceptingHandler(backend, [])
     // 拦截器接入
-    return new HttpClient(httpInterceptingHandler)
+    return new Xylitol(httpInterceptingHandler)
+  }
+
+  static factory(): XylitolFactory {
+    const interceptors: HttpInterceptor[] = []
+
+    const methods = {
+      addInterceptors (interceptors: HttpInterceptor[]) {
+        interceptors.push(...interceptors)
+        return methods
+      },
+      create () {
+        const xhrFactory = new BrowserXhr()
+        const backend = new HttpXhrBackend(xhrFactory)
+        // 融合拦截器
+        const httpInterceptingHandler = new HttpInterceptingHandler(backend, interceptors)
+        // 拦截器接入
+        return new Xylitol(httpInterceptingHandler)
+      }
+    }
+    return methods
   }
 }
+
+type XylitolFactory = {
+  addInterceptors: (i:HttpInterceptor[]) => XylitolFactory,
+  create: () => Xylitol
+}
+
+// export class Xylitol {
+//   private interceptors: HttpInterceptor[] = []
+
+//   useInterceptors (interceptors: HttpInterceptor[] = []): Xylitol {
+//     this.interceptors = this.interceptors.concat(interceptors)
+//     return this
+//   }
+
+//   create (): HttpClient {
+//     const xhrFactory = new BrowserXhr()
+//     const backend = new HttpXhrBackend(xhrFactory)
+//     // 融合拦截器
+//     const httpInterceptingHandler = new HttpInterceptingHandler(backend, this.interceptors)
+//     // 拦截器接入
+//     return new HttpClient(httpInterceptingHandler)
+//   }
+// }

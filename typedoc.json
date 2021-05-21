@@ -1,0 +1,6 @@
+{
+  "entryPoints": ["src/main.ts"],
+  "out": "docs",
+  "excludeExternals": true,
+  "externalPattern": "rxjs/**/*.ts"
+}
